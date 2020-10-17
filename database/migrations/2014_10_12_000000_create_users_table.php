@@ -19,6 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->bigInteger('score')->default(0);
+            $table->boolean('is_block')->default(0);
+            $table->enum('level',['user','admin'])->default('user');
             $table->rememberToken();
             $table->timestamps();
         });
