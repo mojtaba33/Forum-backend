@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Feature;
+namespace Tests\Feature\v1;
 
 use App\Models\Channel;
 use App\Models\User;
