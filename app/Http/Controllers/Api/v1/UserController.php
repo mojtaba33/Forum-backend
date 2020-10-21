@@ -30,6 +30,10 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
+
+        config('permissions.default_super_admin_email') == $user->email ?
+            $user->assignRole('Super_Admin') : $user->assignRole('User') ;
+
         return response()->json([
             'message'   => 'user created successfully',
             'data'      => [

@@ -57,10 +57,10 @@ class ChannelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Channel  $channel
+     * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Channel $channel)
+    public function show($id)
     {
         //
     }
@@ -68,10 +68,10 @@ class ChannelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Channel  $channel
+     * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Channel $channel)
+    public function edit($id)
     {
         //
     }
@@ -79,15 +79,17 @@ class ChannelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Channel  $channel
+     * @param \Illuminate\Http\Request $request
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Channel $channel)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'title'  =>  'required|max:255'
         ]);
+
+        $channel = Channel::find($id);
 
         $channel->update([
             'title' => $request->input('title'),
@@ -102,11 +104,13 @@ class ChannelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Channel  $channel
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Channel $channel)
+    public function destroy($id)
     {
+        $channel = Channel::find($id);
+
         $channel->delete();
 
         return response()->json([

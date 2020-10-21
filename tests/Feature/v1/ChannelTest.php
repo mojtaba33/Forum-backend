@@ -5,7 +5,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class DefaultChannelTest extends TestCase
+class ChannelTest extends TestCase
 {
 
 
@@ -16,7 +16,7 @@ class DefaultChannelTest extends TestCase
      */
     public function testGetAllChannels()
     {
-        $response = $this->getJson(route('d.channel.get'));
+        $response = $this->getJson(route('v1.channel.get'));
         $response->assertStatus(200);
     }
 }

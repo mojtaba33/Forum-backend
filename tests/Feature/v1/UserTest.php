@@ -3,6 +3,7 @@
 namespace Tests\Feature\v1;
 
 use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -11,6 +12,12 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(DatabaseSeeder::class);
+    }
+
     /**
      * Test for Registration.
      *
@@ -18,7 +25,7 @@ class UserTest extends TestCase
      */
     public function testUserInformationNotValidate()
     {
-        $response = $this->postJson('/api/register');
+        $response = $this->postJson(route('v1.auth.register'));
 
         $response->assertStatus(422);
     }
@@ -30,7 +37,7 @@ class UserTest extends TestCase
      */
     public function testUserRegister()
     {
-        $response = $this->postJson('/api/register',[
+        $response = $this->postJson(route('v1.auth.register'),[
             'name' => 'javad',
             'email' => 'j@j.com',
             'password' => '12345678',
@@ -47,7 +54,7 @@ class UserTest extends TestCase
      */
     public function testLoginValidation()
     {
-        $response = $this->postJson(route('auth.login'));
+        $response = $this->postJson(route('v1.auth.login'));
         $response->assertStatus(422);
     }
 
@@ -59,7 +66,7 @@ class UserTest extends TestCase
     public function testUserLogin()
     {
         $user = User::factory()->create();
-        $response = $this->postJson(route('auth.login'),[
+        $response = $this->postJson(route('v1.auth.login'),[
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -69,14 +76,14 @@ class UserTest extends TestCase
     public function testLoggedInUserMiddleware()
     {
         $user = User::factory()->create();
-        $response = $this->actingAs($user)->getJson(route('auth.user'));
+        $response = $this->actingAs($user)->getJson(route('v1.auth.user'));
         $response->assertStatus(200);
     }
 
     public function testNotRegisteredUserMiddleware()
     {
         //$user = User::factory()->create();
-        $response = $this->getJson(route('auth.user'));
+        $response = $this->getJson(route('v1.auth.user'));
         $response->assertStatus(401);
     }
 
@@ -88,7 +95,7 @@ class UserTest extends TestCase
     public function testUserLogout()
     {
         $user = User::factory()->create();
-        $response = $this->actingAs($user)->getJson(route('auth.logout'));
+        $response = $this->actingAs($user)->getJson(route('v1.auth.logout'));
         $response->assertStatus(200);
     }
 }
