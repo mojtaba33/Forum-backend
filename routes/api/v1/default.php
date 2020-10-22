@@ -10,3 +10,5 @@ Route::get('channels','ChannelController@index')->name('channel.index');
 
 Route::resource('thread','ThreadController');
 Route::patch('thread/{thread}/bestAnswer','ThreadController@setBestAnswer')->name('thread.best.answer');
+
+Route::resource('answer','AnswerController')->middleware('auth:sanctum');

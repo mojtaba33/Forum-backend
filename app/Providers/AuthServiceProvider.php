@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Answer;
 use App\Models\Channel;
 use App\Models\Permission;
 use App\Models\Thread;
@@ -39,6 +40,11 @@ class AuthServiceProvider extends ServiceProvider
         // check if user can update or delete thread
         Gate::define('checkUserCanUpdateOrDeleteThread',function (User $user,Thread $thread){
             return $user->id == $thread->user_id || $user->hasRoleGate('Super_Admin');
+        });
+
+        // check if user can update or delete answer
+        Gate::define('checkUserCanUpdateOrDeleteAnswer',function (User $user,Answer $answer){
+            return $user->id == $answer->user_id || $user->hasRoleGate('Super_Admin');
         });
     }
 }

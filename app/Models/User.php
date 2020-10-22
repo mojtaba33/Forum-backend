@@ -80,4 +80,14 @@ class User extends Authenticatable
         $role = Role::where('title',$role)->firstOrFail();
         $this->roles()->attach($role);
     }
+
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 }
