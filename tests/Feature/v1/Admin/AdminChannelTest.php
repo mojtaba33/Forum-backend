@@ -61,6 +61,9 @@ class AdminChannelTest extends TestCase
             'title' => $this->faker->sentence(1),
         ]);
         $response->assertCreated();
+
+        $channel_id = $response->json('data')['id'];
+        $this->assertTrue(Channel::find($channel_id)->exists());
     }
 
     /**
@@ -112,5 +115,6 @@ class AdminChannelTest extends TestCase
     {
         $response = $this->actingAs($this->user)->deleteJson(route('v1.admin.channel.destroy',$this->channel));
         $response->assertStatus(200);
+        $this->assertTrue(!$this->channel->exists());
     }
 }

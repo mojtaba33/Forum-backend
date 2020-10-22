@@ -54,7 +54,7 @@ class ThreadController extends Controller
             'channel_id' => 'required'
         ]);
 
-        Thread::create([
+        $threads = Thread::create([
             'title'      => $request->input('title'),
             'content'    => $request->input('content'),
             'channel_id' => $request->input('channel_id'),
@@ -63,6 +63,7 @@ class ThreadController extends Controller
 
         return \response()->json([
             'message'   => 'thread create successfully',
+            'data'      => $threads
         ],201);
     }
 

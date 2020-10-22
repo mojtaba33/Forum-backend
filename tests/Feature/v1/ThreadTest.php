@@ -65,6 +65,9 @@ class ThreadTest extends TestCase
         ]);
 
         $response->assertStatus(201);
+
+        $thread_id = $response->json('data')['id'];
+        $this->assertTrue(Thread::find($thread_id)->exists());
     }
 
     public function testUpdateThreadValidation()
@@ -107,6 +110,8 @@ class ThreadTest extends TestCase
         $response = $this->actingAs($this->user)->deleteJson(route('v1.thread.destroy',$this->thread->id));
 
         $response->assertStatus(200);
+
+        $this->assertTrue(!$this->thread->exists());
     }
 
     public function testSetBestAnswerThread()
