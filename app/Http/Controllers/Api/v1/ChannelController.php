@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
-    public function get()
+    public function index()
     {
         $channels = Channel::latest()->paginate(20);
         return response()->json([

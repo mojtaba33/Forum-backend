@@ -6,6 +6,7 @@ Route::post('login','UserController@login')->name('auth.login');
 Route::get('logout','UserController@logout')->name('auth.logout');
 Route::get('user','UserController@user')->middleware('auth:sanctum')->name('auth.user');
 
-Route::get('channels','ChannelController@get')->name('channel.get');
+Route::get('channels','ChannelController@index')->name('channel.index');
 
-
+Route::resource('thread','ThreadController');
+Route::patch('thread/{thread}/bestAnswer','ThreadController@setBestAnswer')->name('thread.best.answer');

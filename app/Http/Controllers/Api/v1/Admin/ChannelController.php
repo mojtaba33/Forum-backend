@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Channel;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ChannelController extends Controller
@@ -11,7 +12,7 @@ class ChannelController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -25,7 +26,7 @@ class ChannelController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function create()
     {
@@ -36,7 +37,7 @@ class ChannelController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -80,16 +81,14 @@ class ChannelController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param Channel $channel
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Channel $channel)
     {
         $request->validate([
             'title'  =>  'required|max:255'
         ]);
-
-        $channel = Channel::find($id);
 
         $channel->update([
             'title' => $request->input('title'),
@@ -104,13 +103,12 @@ class ChannelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param Channel $channel
+     * @return JsonResponse
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Channel $channel)
     {
-        $channel = Channel::find($id);
-
         $channel->delete();
 
         return response()->json([

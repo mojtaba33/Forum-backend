@@ -16,7 +16,7 @@ class ChannelTest extends TestCase
      */
     public function testGetAllChannels()
     {
-        $response = $this->getJson(route('v1.channel.get'));
+        $response = $this->getJson(route('v1.channel.index'));
         $response->assertStatus(200);
     }
 }
