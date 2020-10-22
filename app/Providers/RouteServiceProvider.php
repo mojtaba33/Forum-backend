@@ -47,11 +47,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace('App\Http\Controllers')
                 ->group(base_path('routes/web.php'));
 
-            // version 1
+            // version 1 (for route model binding works, its important to give api middleware to routes)
             Route::prefix('api/v1')->namespace('App\Http\Controllers\api\v1')->name('v1.')
-                ->group(base_path('routes/api/v1/default.php'));
+                ->middleware('api')->group(base_path('routes/api/v1/default.php'));
             Route::prefix('api/v1/admin')->namespace('App\Http\Controllers\api\v1\Admin')
-                ->name('v1.admin.')->middleware(['auth:sanctum','checkAdmin'])
+                ->name('v1.admin.')->middleware(['api','auth:sanctum','checkAdmin'])
                 ->group(base_path('routes/api/v1/admin.php'));
 
 
