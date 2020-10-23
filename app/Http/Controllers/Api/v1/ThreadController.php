@@ -135,7 +135,7 @@ class ThreadController extends Controller
 
         $thread->delete();
 
-        return \response()->json([
+        return response()->json([
             'message'   => 'thread deleted successfully',
         ],200);
     }

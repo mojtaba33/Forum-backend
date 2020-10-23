@@ -35,4 +35,10 @@ class Thread extends Model
     {
         return $this->hasMany(Answer::class);
     }
+
+    public function subscription()
+    {
+        return $this->belongsToMany(User::class)->as('subscription')
+            ->withTimestamps();
+    }
 }

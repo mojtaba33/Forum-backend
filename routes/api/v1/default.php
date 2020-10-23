@@ -12,3 +12,8 @@ Route::resource('thread','ThreadController');
 Route::patch('thread/{thread}/bestAnswer','ThreadController@setBestAnswer')->name('thread.best.answer');
 
 Route::resource('answer','AnswerController')->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->group(function (){
+    Route::post('subscribe/thread/{thread}','SubscriptionController@subscribe')->name('subscribe.thread');
+    Route::post('unsubscribe/thread/{thread}','SubscriptionController@unsubscribe')->name('unsubscribe.thread');
+});
