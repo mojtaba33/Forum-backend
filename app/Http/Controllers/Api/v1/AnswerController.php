@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
+use App\Models\Thread;
+use App\Notifications\ThreadAnswered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class AnswerController extends Controller
 {
@@ -45,6 +48,11 @@ class AnswerController extends Controller
             'thread_id' => $request->input('thread_id'),
             'content' => $request->input('content'),
         ]);
+
+        // send notifications to users who subscribe this thread
+        $thread = Thread::find($request->input('thread_id'));
+        $users = $thread->subscription()->get();
+        Notification::send($users,new ThreadAnswered($thread));
 
         return response()->json([
             'message' => 'answer submitted successfully',

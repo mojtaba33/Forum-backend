@@ -4,13 +4,15 @@ namespace Tests\Feature\v1;
 
 use App\Models\Thread;
 use App\Models\User;
+use App\Notifications\ThreadAnswered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use function PHPUnit\Framework\assertTrue;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class SubscriptionTest extends TestCase
 {
+    use RefreshDatabase;
     protected $thread;
     protected $user;
 
@@ -44,5 +46,22 @@ class SubscriptionTest extends TestCase
         $this->assertFalse($this->user->subscription()->where('thread_id',$this->thread->id)->exists());
 
         $response->assertStatus(200);
+    }
+
+    public function testSendNotificationToUsers()
+    {
+        $this->withoutExceptionHandling();
+
+        Notification::fake();
+        $subscribeResponse = $this->actingAs($this->user)->postJson(route('v1.subscribe.thread',$this->thread));
+        $subscribeResponse->assertStatus(200);
+
+        $response = $this->actingAs($this->user)->postJson(route('v1.answer.store'),[
+            'thread_id' => $this->thread->id,
+            'content' => 'some content',
+        ]);
+
+        $response->assertStatus(201);
+        Notification::assertSentTo($this->user,ThreadAnswered::class);
     }
 }
