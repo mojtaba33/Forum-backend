@@ -56,6 +56,17 @@ class AnswerTest extends TestCase
         $this->assertTrue($thread->answers()->whereContent('some content')->exists());
     }
 
+    public function testIncreaseUsersScore()
+    {
+        $thread = Thread::factory()->create();
+        $this->actingAs($this->user)->postJson(route('v1.answer.store'),[
+            'content' => 'some content',
+            'thread_id' => $thread->id
+        ]);
+        $this->user->refresh();
+        $this->assertEquals($this->user->score,10);
+    }
+
     public function testAnswerUpdateAuth()
     {
         $response = $this->actingAs($this->user)->patchJson(route('v1.answer.update',$this->answer));
@@ -104,6 +115,37 @@ class AnswerTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertTrue(!$this->answer->exists());
+    }
+
+    public function testAnswerSuspended()
+    {
+        $thread = Thread::factory()->create();
+
+        $this->user->update([
+            'is_suspended'  =>  true
+        ]);
+
+        $response = $this->actingAs($this->user)->postJson(route('v1.answer.store'),[
+            'content' => 'some content',
+            'thread_id' => $thread->id
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function testAnswerUpdateSuspended()
+    {
+        $this->setUserIdForAuth();
+
+        $this->user->update([
+            'is_suspended'  =>  true
+        ]);
+
+        $response = $this->actingAs($this->user)->patchJson(route('v1.answer.update',$this->answer),[
+            'content' => 'update content'
+        ]);
+
+        $response->assertStatus(403);
     }
 
     protected function setUserIdForAuth()

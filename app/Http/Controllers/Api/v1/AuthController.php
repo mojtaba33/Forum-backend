@@ -77,20 +77,6 @@ class AuthController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function user()
-    {
-        return response()->json([
-            'message'   => 'user information',
-            'data'      => [
-                'name' => auth()->user()->name,
-                'email' => auth()->user()->email,
-            ]
-        ],200);
-    }
-
-    /**
      * @method GET
      * @return \Illuminate\Http\JsonResponse
      */

@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class checkAdmin
+class checkSuspended
 {
     /**
      * Handle an incoming request.
@@ -18,11 +17,11 @@ class checkAdmin
     public function handle(Request $request, Closure $next)
     {
         if (auth()->check())
-            if (auth()->user()->level === 'admin')
+            if (!auth()->user()->is_suspended)
                 return $next($request);
 
         return response()->json([
-            'message' => 'not found',
-        ],Response::HTTP_NOT_FOUND);
+            'message'   =>  'you are suspended'
+        ],403);
     }
 }

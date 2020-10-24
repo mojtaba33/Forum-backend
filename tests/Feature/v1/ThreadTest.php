@@ -125,6 +125,21 @@ class ThreadTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function testStoreThreadSuspended()
+    {
+        $this->user->update([
+            'is_suspended'  =>  true
+        ]);
+
+        $response = $this->actingAs($this->user)->postJson(route('v1.thread.store'),[
+            'title'      => 'test',
+            'content'    => 'some text',
+            'channel_id' => Channel::factory()->create()->id,
+        ]);
+
+        $response->assertStatus(403);
+    }
+
     protected function setUserIdForAuth()
     {
         $this->thread->update([

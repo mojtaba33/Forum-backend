@@ -23,7 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'score',
-        'is_block',
+        'is_suspended',
         'level'
     ];
 

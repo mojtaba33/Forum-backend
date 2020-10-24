@@ -12,6 +12,17 @@ use Illuminate\Support\Facades\Notification;
 class AnswerController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only(['store','update']);
+        $this->middleware('check.suspended')->only(['store','update']);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -49,10 +60,13 @@ class AnswerController extends Controller
             'content' => $request->input('content'),
         ]);
 
-        // send notifications to users who subscribe this thread
         $thread = Thread::find($request->input('thread_id'));
-        $users = $thread->subscription()->get();
-        Notification::send($users,new ThreadAnswered($thread));
+
+        // send notifications to users who subscribe this thread
+        $this->sendNotification($thread);
+
+        if (auth()->user()->id != $thread->user_id)
+            auth()->user()->increment('score',10);
 
         return response()->json([
             'message' => 'answer submitted successfully',
@@ -125,5 +139,14 @@ class AnswerController extends Controller
             'message' => 'answer deleted successfully',
             'data'  => $answer
         ],200);
+    }
+
+    /**
+     * @param Thread $thread
+     */
+    protected function sendNotification(Thread $thread)
+    {
+        $users = $thread->subscription()->get();
+        Notification::send($users, new ThreadAnswered($thread));
     }
 }

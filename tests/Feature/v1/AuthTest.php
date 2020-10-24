@@ -73,20 +73,6 @@ class AuthTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testLoggedInUserMiddleware()
-    {
-        $user = User::factory()->create();
-        $response = $this->actingAs($user)->getJson(route('v1.auth.user'));
-        $response->assertStatus(200);
-    }
-
-    public function testNotRegisteredUserMiddleware()
-    {
-        //$user = User::factory()->create();
-        $response = $this->getJson(route('v1.auth.user'));
-        $response->assertStatus(401);
-    }
-
     /**
      * Test for Logout.
      *

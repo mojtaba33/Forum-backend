@@ -16,6 +16,7 @@ class ThreadController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->only(['store','update']);
+        $this->middleware('check.suspended')->only(['store','update']);
     }
     /**
      * Display a listing of the resource.
