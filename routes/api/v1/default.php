@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('register','AuthController@register')->name('auth.register');
 Route::post('login','AuthController@login')->name('auth.login');
 Route::get('logout','AuthController@logout')->name('auth.logout');
+Route::get('check','AuthController@checkLogin')->name('auth.checkLogin');
 
 Route::get('user','UserController@show')->middleware('auth:sanctum')->name('auth.show');
 

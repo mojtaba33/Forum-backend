@@ -41,4 +41,9 @@ class Thread extends Model
         return $this->belongsToMany(User::class)->as('subscription')
             ->withTimestamps();
     }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
 }

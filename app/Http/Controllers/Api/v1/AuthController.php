@@ -90,4 +90,14 @@ class AuthController extends Controller
             ]
         ],200);
     }
+
+    public function checkLogin()
+    {
+        return response()->json([
+            'message' => 'success',
+            'data' => [
+                'check' => \auth()->check()
+            ]
+        ]);
+    }
 }

@@ -25,7 +25,9 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        $threads = Thread::where('flag',1)->paginate(20);
+        $threads = Thread::query()->with([
+            'user:id,name,email','channel:id,title'
+        ])->where('flag',1)->latest()->paginate(20);
         return response()->json([
             'message' => 'success',
             'data'    => $threads
@@ -76,7 +78,9 @@ class ThreadController extends Controller
      */
     public function show($slug)
     {
-        $thread = Thread::where('flag',1)->where('slug',$slug)->first();
+        $thread = Thread::with([
+            'answers','channel:id,title','user:id,name,email'
+        ])->where('flag',1)->where('slug',$slug)->first();
         return response()->json([
             'message' => 'success',
             'data'  => $thread
